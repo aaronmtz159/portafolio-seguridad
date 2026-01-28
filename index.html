@@ -227,16 +227,19 @@
 </section>
 
             <section id="contacto" class="card full-width">
-                <h2>Formulario de Contacto</h2>
-                <form>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <input type="text" placeholder="Nombre completo" required>
-                        <input type="email" placeholder="Correo institucional" required>
-                    </div>
-                    <textarea rows="4" placeholder="Mensaje" style="margin-top:1rem;" required></textarea>
-                    <button type="submit">Enviar Mensaje</button>
-                </form>
-            </section>
+    <h2>Formulario de Contacto</h2>
+    <form action="https://formspree.io/f/xpqraebw" method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <input type="text" name="nombre" placeholder="Nombre completo" required>
+            <input type="email" name="email" placeholder="Correo institucional" required>
+        </div>
+        <textarea name="mensaje" rows="4" placeholder="Mensaje al docente/cliente" style="margin-top:1rem;" required></textarea>
+        
+        <input type="hidden" name="_next" value="https://tuusuario.github.io/gracias.html">
+        
+        <button type="submit">Enviar Mensaje</button>
+    </form>
+</section>
         </div>
 
         <footer>
@@ -246,4 +249,5 @@
     </main>
 
 </body>
+
 </html>
