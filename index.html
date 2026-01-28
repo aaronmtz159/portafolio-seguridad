@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Técnico | CNO V</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --glass-bg: rgba(255, 255, 255, 0.75); 
+            --sidebar-bg: rgba(255, 255, 255, 0.9);
+            --accent: #2563eb;
+            --text-dark: #111827;
+            --text-muted: #4b5563;
+            --border: rgba(229, 231, 235, 0.5);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            
+            background-image: url('imagen.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-dark);
+        }
+
+        /* BARRA LATERAL TRANSLÚCIDA */
+        aside {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px); /* Efecto de desenfoque */
+            border-right: 1px solid var(--border);
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+        .logo-area {
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding-bottom: 2rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav { margin-top: 2rem; flex-grow: 1; }
+        nav ul { list-style: none; padding: 0; }
+        nav li { margin-bottom: 0.5rem; }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--accent);
+        }
+
+        .external-link::after { content: ' ↗'; font-size: 0.8rem; }
+
+        /* CONTENIDO PRINCIPAL */
+        main {
+            margin-left: var(--sidebar-width);
+            padding: 3rem 5%;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* TARJETAS TRANSPARENTES (GLASSMORPHISM) */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .full-width { grid-column: 1 / -1; }
+
+        header { margin-bottom: 3rem; display: flex; justify-content: space-between; color: white}
+        .header-main h1 { color: white; margin: 0; font-size: 2.2rem;}
+        .header-meta { text-align: right; font-size: 0.85rem; color: white; font-weight: 500; }
+
+        h2 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* INPUTS TRANSPARENTES */
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-sizing: border-box;
+            color: var(--text-dark);
+        }
+
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover { transform: translateY(-2px); }
+
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+            main { margin-left: 0; }
+            .grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo-area">Portafolio Ciberseguridad</div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="parcial1.html" class="external-link">Parcial 1</a></li>
+                <li><a href="parcial2.html" class="external-link">Parcial 2</a></li>
+                <li><a href="parcial3.html" class="external-link">Parcial 3</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="inicio">
+        <header>
+            <div class="header-main">
+                <h1 color="white">Aaron Efraim Mata Martinez</h1>
+                <p style="font-weight: 600;" color: white>Portafolio Técnico de Seguridad</p>
+            </div>
+            <div class="header-meta">
+                <p><strong>CNO V – Seguridad Informática</strong></p>
+                <p>Universidad Politecnica de San Luis Potosi</p>
+                <p>Periodo: Ene - Jun 2026</p>
+            </div>
+        </header>
+
+        <div class="grid-container">
+            <section class="card full-width">
+                <h2>Presentación</h2>
+                <p>
+                    Este espacio tiene como <strong>propósito</strong> documentar de forma técnica mi proceso y evolución en la materia de Seguridad Informática. 
+                    El <strong>enfoque</strong> del curso se centra en el dominio de <strong>pruebas de penetración</strong>, <strong>análisis de vulnerabilidades</strong> y la aplicación de protocolos de defensa activa. 
+                    La <strong>importancia</strong> de este portafolio radica en servir como <strong>evidencia del proceso de aprendizaje</strong>, validando la capacidad de proteger activos digitales en entornos reales.
+                 </p>
+            </section>
+
+            <section id="perfil" class="card">
+                <h2>Perfil del Estudiante</h2>
+                <p>
+                    Mi <strong>formación académica</strong> ha estado marcada por un interés constante en entender cómo funcionan los sistemas por dentro y, sobre todo, cómo hacerlos más seguros. 
+                    Me gusta trabajar con <strong>Java</strong> y disfruto enfrentándome a retos que me obliguen a pensar de forma lógica y creativa para encontrar soluciones que funcionen bien.
+                </p>
+                <p>
+                    En cuanto a mis <strong>intereses</strong>, me motiva mucho todo lo relacionado con la <strong>seguridad informática</strong> y el <strong>analisis de datos</strong>. Siempre estoy buscando aprender más a través de la <strong>investigación</strong> para entender las nuevas amenazas y cómo protegernos de ellas.
+                </p>
+            </section>
+
+            <section class="card">
+    <h2>Ficha Técnica</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        
+        <div>
+            <p><strong>Lenguajes y Tecnologías</strong></p>
+            <ul style="font-size: 0.9rem; padding-left: 1.2rem;">
+                <li><strong>Java:</strong> POO y Swing para interfaces gráficas.</li>
+                <li><strong>Web:</strong> HTML, CSS y JavaScript básico.</li>
+                <li><strong>Datos y Redes:</strong> SQL simple, redes y seguridad informática.</li>
+            </ul>
+        </div>
+
+        <div>
+            <p><strong>Plataformas y Control</strong></p>
+            <ul style="font-size: 0.9rem; padding-left: 1.2rem;">
+                <li><strong>Entornos:</strong> Escritorio (Swing), Web y Telegram.</li>
+                <li><strong>Publicación:</strong> GitHub Pages</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+            <section id="contacto" class="card full-width">
+                <h2>Formulario de Contacto</h2>
+                <form>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" placeholder="Nombre completo" required>
+                        <input type="email" placeholder="Correo institucional" required>
+                    </div>
+                    <textarea rows="4" placeholder="Mensaje" style="margin-top:1rem;" required></textarea>
+                    <button type="submit">Enviar Mensaje</button>
+                </form>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 | Aaron Mata | CNO V</p>
+            <p style="color: #059669;">Universidad Politecnica de San Luis Potosi</p>
+        </footer>
+    </main>
+
+</body>
+</html>
