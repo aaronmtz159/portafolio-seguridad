@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLi Labs | PortSwigger Academy | Aaron Mata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --accent: #2563eb;
+            --text-dark: #111827;
+            --border: rgba(229, 231, 235, 0.4);
+            --code-bg: #0f172a;
+            --lab-success: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-image: url('imagen.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 { color: var(--accent); margin: 0; font-size: 1.8rem; }
+        .progress-badge {
+            background: var(--lab-success);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Contenedor de Laboratorios */
+        .labs-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .lab-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .lab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .lab-number {
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .lab-title {
+            font-size: 1.2rem;
+            margin: 0.2rem 0;
+            color: var(--text-dark);
+        }
+
+        .payload-box {
+            background: var(--code-bg);
+            color: #38bdf8;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .payload-box::before {
+            content: "PAYLOAD / COMMAND";
+            display: block;
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        footer { text-align: center; margin-top: 3rem; font-size: 0.8rem; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="nav-bar">
+            <a href="road.html" style="text-decoration: none; color: var(--text-dark); font-weight: 600;">← Volver</a>
+            <div class="progress-badge">16 Laboratorios Completados</div>
+        </div>
+
+        <header>
+            <h1>SQL Injection Labs</h1>
+            <p>Resolución técnica de laboratorios avanzados en PortSwigger Web Security Academy.</p>
+        </header>
+
+        <div id="lab-01" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #01 (APPRENTICE)</span>
+                        <h2 class="lab-title">SQL injection vulnerability in WHERE clause allowing retrieval of hidden data</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio contiene una vulnerabilidad de inyección SQL en el filtro de categoría de productos. Al seleccionar una categoría, la aplicación ejecuta una consulta que filtra por productos lanzados (<code>released = 1</code>). El objetivo es manipular la lógica de la consulta para omitir este filtro y visualizar productos no publicados.
+                </p>
+                <div class="payload-box">
+                    ' OR 1=1 --
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    Se interceptó la solicitud con Burp Suite y se modificó el parámetro <code>category</code>. El payload cierra la comilla simple de la consulta original, añade una condición siempre verdadera (<code>OR 1=1</code>) y comenta el resto de la sentencia original (<code>--</code>).
+                </div>
+            </div>
+
+            <div id="lab-02" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #02 (APPRENTICE)</span>
+                        <h2 class="lab-title">SQL injection vulnerability allowing login bypass</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio presenta una vulnerabilidad de inyección SQL en la función de inicio de sesión. El objetivo es realizar un ataque que permita acceder al sistema como el usuario <code>administrator</code> sin poseer sus credenciales legítimas.
+                </p>
+                <div class="payload-box">
+                    administrator'--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    Se utilizó Burp Suite para interceptar la solicitud POST del login. Al modificar el parámetro <code>username</code> con el payload, se logra que la consulta SQL considere únicamente el nombre de usuario y comente el resto de la validación (incluyendo la contraseña), forzando el acceso exitoso.
+                </div>
+            </div>
+
+            <div id="lab-03" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #03 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection attack, querying the database type and version on Oracle</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio contiene una vulnerabilidad de inyección SQL en el filtro de categorías. El objetivo es utilizar un ataque <code>UNION</code> para recuperar la cadena de versión de la base de datos Oracle.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT BANNER, NULL FROM v$version--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. Se determinó el número de columnas (2) y cuáles contienen texto mediante el payload <code>' UNION SELECT 'abc', 'def' FROM dual--</code>.<br>
+                    2. Al tratarse de Oracle, es obligatorio incluir la cláusula <code>FROM</code> con una tabla válida (como <code>dual</code> o <code>v$version</code>).<br>
+                    3. Se inyectó el payload final para extraer la información del banner de la versión del sistema.
+                </div>
+            </div>
+            <div id="lab-04" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #04 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection attack, querying the database type and version on MySQL and Microsoft</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio contiene una vulnerabilidad de inyección SQL en el filtro de categorías. El objetivo es recuperar la cadena de versión de la base de datos utilizando un ataque <code>UNION</code> adaptado para MySQL o Microsoft SQL Server.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT @@version, NULL#
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. Se determinó el número de columnas y cuáles contienen texto mediante el payload <code>' UNION SELECT 'abc', 'def'#</code>. El uso del carácter <code>#</code> es fundamental para comentar el resto de la consulta en MySQL.<br>
+                    2. A diferencia de Oracle, en MySQL y Microsoft no siempre es necesaria la cláusula <code>FROM</code> para consultas simples de sistema.<br>
+                    3. Se inyectó el payload final utilizando la constante <code>@@version</code> para extraer la información técnica del motor de base de datos.
+                </div>
+            </div>
+            <div id="lab-05" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #05 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection attack, listing the database contents on non-Oracle databases</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio es una práctica completa de exfiltración de datos. El objetivo es identificar las tablas y columnas de la base de datos para recuperar el nombre de usuario y la contraseña de todas las cuentas, y posteriormente autenticarse como <code>administrator</code>.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT table_name, NULL FROM information_schema.tables--<br>
+                    ' UNION SELECT column_name, NULL FROM information_schema.columns WHERE table_name = 'users_abcdef'--<br>
+                    ' UNION SELECT username_abcdef, password_abcdef FROM users_abcdef--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Determinación de columnas:</strong> Se confirmó que la consulta devuelve dos columnas de texto[cite: 520].<br>
+                    2. <strong>Enumeración de tablas:</strong> Se consultó <code>information_schema.tables</code> para localizar la tabla de usuarios (ej. <code>users_abcdef</code>)[cite: 520].<br>
+                    3. <strong>Enumeración de columnas:</strong> Se consultó <code>information_schema.columns</code> para obtener los nombres exactos de los campos de credenciales[cite: 520].<br>
+                    4. <strong>Exfiltración:</strong> Se ejecutó el <code>UNION SELECT</code> final sobre la tabla específica para obtener la contraseña del administrador[cite: 520].
+                </div>
+            </div>
+            <div id="lab-06" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #06 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection attack, listing the database contents on Oracle</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio implica la exfiltración de credenciales de usuario desde una base de datos Oracle. El objetivo es navegar por el diccionario de datos de Oracle para localizar la tabla de usuarios y sus columnas correspondientes para obtener la contraseña del usuario <code>administrator</code>.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT table_name, NULL FROM all_tables--<br>
+                    ' UNION SELECT column_name, NULL FROM all_tab_columns WHERE table_name = 'USERS_ABCDEF'--<br>
+                    ' UNION SELECT USERNAME_ABCDEF, PASSWORD_ABCDEF FROM USERS_ABCDEF--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Prueba de columnas:</strong> Se validó el número de columnas y tipos de datos usando <code>' UNION SELECT 'abc', 'def' FROM dual--</code>.<br>
+                    2. <strong>Listado de tablas:</strong> Se consultó la tabla de sistema <code>all_tables</code> para identificar la tabla que almacena credenciales.<br>
+                    3. <strong>Listado de columnas:</strong> Se utilizó <code>all_tab_columns</code> filtrando por el nombre de la tabla descubierta para obtener los nombres de los campos.<br>
+                    4. <strong>Extracción:</strong> Se ejecutó la consulta final para recuperar el nombre de usuario y contraseña del administrador.
+                </div>
+            </div>
+
+            <div id="lab-07" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #07 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection UNION attack, determining the number of columns returned by the query</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio contiene una vulnerabilidad de inyección SQL en el filtro de categorías. El objetivo es determinar el número exacto de columnas devueltas por la consulta original mediante el uso de valores <code>NULL</code>, técnica necesaria para construir ataques UNION más complejos en fases posteriores.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT NULL--<br>
+                    ' UNION SELECT NULL, NULL--<br>
+                    ' UNION SELECT NULL, NULL, NULL--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. Se interceptó la solicitud con Burp Suite y se modificó el parámetro <code>category</code>.<br>
+                    2. Se inyectaron progresivamente valores <code>NULL</code> en la sentencia <code>UNION SELECT</code>.<br>
+                    3. Se observó que la aplicación devolvía un error hasta que el número de <code>NULL</code> coincidió con el número de columnas de la consulta original.<br>
+                    4. La resolución del laboratorio se confirma cuando la aplicación responde correctamente, incluyendo el contenido adicional de los valores nulos.
+                </div>
+            </div>
+
+            <div id="lab-08" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #08 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection UNION attack, finding a column containing text</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio requiere identificar cuál de las columnas devueltas por una consulta original acepta datos de tipo texto. El objetivo es hacer que un valor aleatorio proporcionado por el laboratorio aparezca en los resultados de la consulta.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT 'abcdef', NULL, NULL--<br>
+                    ' UNION SELECT NULL, 'abcdef', NULL--<br>
+                    ' UNION SELECT NULL, NULL, 'abcdef'--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. Se utilizó Burp Suite para determinar que la consulta original devuelve tres columnas usando <code>' UNION SELECT NULL, NULL, NULL--</code>[cite: 17].<br>
+                    2. Se reemplazó sistemáticamente cada valor <code>NULL</code> por la cadena de texto proporcionada (ej. 'abcdef')[cite: 17].<br>
+                    3. Si la base de datos devuelve un error, significa que esa columna no es compatible con texto; si la página carga y muestra el valor, se ha identificado una columna válida[cite: 17].<br>
+                    4. Este proceso se repite hasta encontrar la columna que permite la exfiltración de datos legibles[cite: 17].
+                </div>
+            </div>
+
+            <div id="lab-09" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #09 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection UNION attack, retrieving data from other tables</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio requiere la combinación de técnicas de inyección UNION para recuperar datos de una tabla distinta a la de la consulta original. Se debe extraer el contenido de la tabla <code>users</code>, la cual contiene las columnas <code>username</code> y <code>password</code>.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT username, password FROM users--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Análisis inicial:</strong> Se utilizó Burp Suite para confirmar que la consulta devuelve dos columnas y que ambas son compatibles con tipos de datos de texto mediante el payload <code>' UNION SELECT 'abc', 'def'--</code>.<br>
+                    2. <strong>Extracción de datos:</strong> Al conocer los nombres de la tabla y las columnas por la descripción del reto, se ejecutó un <code>UNION SELECT</code> directo para volcar todas las credenciales.<br>
+                    3. <strong>Explotación final:</strong> Se localizaron las credenciales del usuario <code>administrator</code> en la respuesta de la aplicación y se procedió con el inicio de sesión exitoso.
+                </div>
+            </div>
+
+            <div id="lab-10" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #10 (PRACTITIONER)</span>
+                        <h2 class="lab-title">SQL injection attack, querying the database type and version on PostgreSQL</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio contiene una vulnerabilidad de inyección SQL en el filtro de categorías. El objetivo es extraer la cadena de versión de la base de datos PostgreSQL utilizando un ataque de tipo <code>UNION</code>.
+                </p>
+                <div class="payload-box">
+                    ' UNION SELECT version(), NULL--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Análisis de columnas:</strong> Se determinó que la consulta devuelve dos columnas y que la primera es compatible con tipos de datos de texto mediante el payload <code>' UNION SELECT 'abc', NULL--</code>.<br>
+                    2. <strong>Consulta de sistema:</strong> En PostgreSQL, la función <code>version()</code> devuelve una cadena detallada con el nombre del software y su versión específica.<br>
+                    3. <strong>Ejecución:</strong> Se inyectó el payload para mostrar la información del sistema en lugar del listado de productos habitual.
+                </div>
+            </div>
+
+            <div id="lab-11" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #11 (PRACTITIONER)</span>
+                        <h2 class="lab-title">Blind SQL injection with conditional responses</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio utiliza una cookie de rastreo para realizar consultas SQL que no devuelven resultados visibles. El objetivo es explotar esta vulnerabilidad ciega para extraer la contraseña del usuario <code>administrator</code> analizando las respuestas condicionales de la página.
+                </p>
+                <div class="payload-box">
+                    TrackingId=xyz' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Confirmación de Vulnerabilidad:</strong> Se inyectaron condiciones booleanas en la cookie <code>TrackingId</code>. La respuesta <code>' AND '1'='1</code> mostró un mensaje de "Welcome back", mientras que <code>' AND '1'='2</code> lo hizo desaparecer.<br>
+                    2. <strong>Enumeración de Longitud:</strong> Se utilizó <code>' AND (SELECT username FROM users WHERE username='administrator' AND LENGTH(password)>19)='administrator</code> para confirmar que la contraseña tiene 20 caracteres.<br>
+                    3. <strong>Ataque de Fuerza Bruta:</strong> Se configuró <strong>Burp Intruder</strong> para iterar a través de cada posición de la contraseña (1 a 20) y probar todos los caracteres posibles (a-z, 0-9) usando la función <code>SUBSTRING()</code>.<br>
+                    4. <strong>Inferencia:</strong> Se filtraron los resultados en Burp Suite buscando la presencia del mensaje "Welcome back" para reconstruir la contraseña completa.
+                </div>
+            </div>
+            <div id="lab-12" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #12 (PRACTITIONER)</span>
+                        <h2 class="lab-title">Blind SQL injection with conditional errors</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    En este laboratorio, la base de datos no devuelve resultados ni mensajes de error informativos. Sin embargo, se puede inducir un error de servidor (HTTP 500) mediante consultas mal formadas para inferir datos. El objetivo es extraer la contraseña de <code>administrator</code> en una base de datos Oracle.
+                </p>
+                <div class="payload-box">
+                    TrackingId=xyz' || (SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator') || '
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Identificación del motor:</strong> Se confirmó el uso de Oracle al requerir la cláusula <code>FROM dual</code> en subconsultas para evitar errores de sintaxis.<br>
+                    2. <strong>Inferencia mediante errores:</strong> Se utilizó la función <code>TO_CHAR(1/0)</code> para forzar una división por cero (error 500) solo cuando una condición <code>CASE</code> específica es verdadera.<br>
+                    3. <strong>Extracción carácter por carácter:</strong> Se automatizó con Burp Intruder el uso de <code>SUBSTR()</code> para validar cada posición de la contraseña. Si la aplicación devolvía un error 500, el carácter probado era correcto.<br>
+                    4. <strong>Validación final:</strong> Se determinó que la contraseña tiene 20 caracteres y se reconstruyó mediante la observación de los estados de error del servidor.
+                </div>
+            </div>
+
+            <div id="lab-13" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #13 (PRACTITIONER)</span>
+                        <h2 class="lab-title">Visible error-based SQL injection</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio utiliza una cookie de rastreo para una consulta SQL cuyos resultados no se muestran. El objetivo es provocar un error deliberado que contenga datos de la base de datos en su descripción. Se debe extraer la contraseña del usuario <code>administrator</code>.
+                </p>
+                <div class="payload-box">
+                    ' AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Provocación del error:</strong> Se insertó una comilla simple en la cookie <code>TrackingId</code> para confirmar que la aplicación devuelve errores detallados del motor de base de datos.<br>
+                    2. <strong>Prueba de casting:</strong> Se intentó convertir una subconsulta en un tipo de dato entero (<code>int</code>). Al fallar la conversión, la base de datos muestra el contenido original que intentó convertir en el mensaje de error.<br>
+                    3. <strong>Fuga de datos (Leak):</strong> Se ajustó la consulta para seleccionar el campo <code>username</code> de la tabla <code>users</code>. El error reveló <code>"administrator"</code>.<br>
+                    4. <strong>Exfiltración final:</strong> Se cambió el campo a <code>password</code>. El sistema respondió con un error de sintaxis que incluía la contraseña real: <code>invalid input syntax for type integer: "contraseña_extraída"</code>.
+                </div>
+            </div>
+            <div id="lab-14" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #14 (PRACTITIONER)</span>
+                        <h2 class="lab-title">Blind SQL injection with time delays</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este laboratorio utiliza una cookie de rastreo para una consulta SQL. La aplicación no devuelve resultados ni errores, pero la ejecución es síncrona. El objetivo es confirmar la vulnerabilidad provocando un retardo de 10 segundos en la respuesta del servidor.
+                </p>
+                <div class="payload-box">
+                    TrackingId=x'||pg_sleep(10)--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Identificación de Vulnerabilidad Ciega:</strong> Se inyectaron diversos payloads sin observar cambios en la interfaz ni mensajes de error.<br>
+                    2. <strong>Prueba de Tiempo:</strong> Se utilizó la función <code>pg_sleep(10)</code> integrada en la cookie <code>TrackingId</code>.<br>
+                    3. <strong>Confirmación:</strong> Se monitoreó el tiempo de respuesta en la pestaña de red de Burp Suite, confirmando que el servidor tardó exactamente 10 segundos en procesar la solicitud, lo que valida la inyección en una base de datos PostgreSQL.
+                </div>
+            </div>
+
+            <div id="lab-15" class="lab-card">
+                <div class="lab-header">
+                    <div>
+                        <span class="lab-number">LAB #15 (PRACTITIONER)</span>
+                        <h2 class="lab-title">Blind SQL injection with time delays and information retrieval</h2>
+                    </div>
+                </div>
+                <p class="description">
+                    Este es el escenario de explotación más sigiloso. La aplicación es totalmente ciega a cambios de contenido y errores. El objetivo es recuperar la contraseña del usuario <code>administrator</code> utilizando consultas que provocan retardos de tiempo condicionales solo cuando una suposición es correcta.
+                </p>
+                <div class="payload-box">
+                    TrackingId=x'%3BSELECT+CASE+WHEN+(username='administrator'+AND+SUBSTRING(password,1,1)='a')+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END+FROM+users--
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: #4b5563;">
+                    <strong>Metodología:</strong> 
+                    1. <strong>Inferencia Booleana mediante Tiempo:</strong> Se utilizó una sentencia <code>CASE</code> para ejecutar <code>pg_sleep(10)</code> si la condición es verdadera, o <code>pg_sleep(0)</code> si es falsa.<br>
+                    2. <strong>Validación de Longitud:</strong> Se confirmó que la contraseña tiene 20 caracteres observando retardos de 10 segundos al probar <code>LENGTH(password)=20</code>.<br>
+                    3. <strong>Automatización de Exfiltración:</strong> Se configuró <strong>Burp Intruder</strong> con un solo hilo (<code>Maximum concurrent requests = 1</code>) para medir con precisión el tiempo de respuesta de cada carácter probado.<br>
+                    4. <strong>Reconstrucción:</strong> Aquellas solicitudes que tardaron ~10,000ms revelaron el carácter correcto de la contraseña, permitiendo el acceso final como administrador.
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            © 2026 Aaron Mata | Especialización en Inyección SQL | PortSwigger Academy
+        </footer>
+    </div>
+
+</body>
+</html>

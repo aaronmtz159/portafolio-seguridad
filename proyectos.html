@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos Especiales | Aaron Mata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --accent: #2563eb;
+            --text-dark: #111827;
+            --border: rgba(229, 231, 235, 0.4);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-image: url('imagen.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Barra lateral consistente con index.html */
+        aside {
+            width: 260px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+        main {
+            margin-left: 260px;
+            padding: 3rem 5%;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header { margin-bottom: 3rem; }
+        h1 { color: var(--accent); margin: 0; font-size: 2.2rem; }
+        
+        /* Estilos de Tarjetas de Proyecto */
+        .project-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .project-id {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .project-card h2 { margin: 0.5rem 0; font-size: 1.4rem; color: var(--text-dark); }
+        .project-card p { color: #4b5563; margin-bottom: 1.5rem; }
+
+        .btn-project {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        /* Estilo para Proyecto Próximamente */
+        .upcoming {
+            opacity: 0.7;
+            background: rgba(255, 255, 255, 0.2);
+            border-style: dashed;
+        }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+            main { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div style="font-weight: 600; color: var(--accent); padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+            Aaron Mata | Portafolio
+        </div>
+        <nav style="margin-top: 2rem;">
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="index.html" style="text-decoration: none; color: #4b5563; display: block; padding: 0.7rem 0;">Inicio</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="container">
+            <header>
+                <h1>Proyectos</h1>
+                <p>Aplicación de conocimientos técnicos en escenarios complejos de ciberseguridad.</p>
+            </header>
+
+            <section class="project-card">
+                <span class="project-id">PR01</span>
+                <h2>De la teoría a la práctica: Walkthrough en acción</h2>
+                <p>
+                    Documentación detallada y resolución técnica de la máquina <strong>Snakeoil</strong> de Vulnhub. 
+                    Este proyecto incluye el análisis de vulnerabilidades, explotación y post-explotación en un entorno controlado.
+                </p>
+                <a href="snakeoil-walkthrough.html" class="btn-project">Explorar Proyecto →</a>
+            </section>
+
+            <section class="project-card">
+                <span class="project-id">PR02</span>
+                <h2>El Eslabón más Débil: Diseño Ético de una Campaña de Ingeniería Social</h2>
+                <p>
+                    Estudio y ejecución controlada de tácticas de ingeniería social. El enfoque principal es la concientización y el diseño de perímetros de seguridad humana frente a amenazas de phishing y manipulación psicológica.
+                </p>
+                <a href="proyectos/pr02.html" class="btn-project">Explorar Proyecto →</a>
+            </section>
+
+            <section class="project-card upcoming">
+                <span class="project-id">PR03</span>
+                <h2>Proximamente</h2>
+                <p>
+                    Investigación sobre nuevos vectores de ataque y mecanismos de defensa activa en nuevos entornos.
+                </p>
+            </section>
+
+            <footer style="margin-top: 3rem; text-align: center; font-size: 0.8rem; color: #64748b; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                © 2026 Aaron Mata | Proyectos de Ciberseguridad | UPSLP
+            </footer>
+        </div>
+    </main>
+
+</body>
+</html>
