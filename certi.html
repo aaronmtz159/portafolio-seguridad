@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PD05: Certificaciones | Aaron Mata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --accent: #2563eb;
+            --text-dark: #111827;
+            --border: rgba(229, 231, 235, 0.4);
+            --card-inner: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-image: url('imagen.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header-section {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        h1 { color: var(--accent); margin: 0; font-size: 2rem; }
+        
+        /* Sistema de Navegación por Pestañas */
+        .tabs-menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #4b5563;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background: rgba(37, 99, 235, 0.05);
+            color: var(--accent);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Contenedores de Contenido */
+        .cert-content {
+            display: none;
+            background: var(--card-inner);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .cert-content.active {
+            display: block;
+        }
+
+        .cert-layout {
+            display: grid;
+            grid-template-columns: 1fr 200px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .cert-layout { grid-template-columns: 1fr; }
+            .tabs-menu { flex-direction: column; }
+        }
+
+        .reflection-box h3 { margin-top: 0; color: var(--accent); }
+        .reflection-text { text-align: justify; color: #374151; font-size: 0.95rem; }
+
+        /* Columna del Badge y Botón */
+        .badge-sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1.5rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            min-height: 320px; /* Asegura espacio para que cargue la insignia */
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            background: #10b981;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .btn-download:hover { background: #059669; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer { text-align: center; margin-top: 3rem; font-size: 0.8rem; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-section">
+            <a href="index.html" style="text-decoration: none; color: var(--accent); font-weight: 600;">← Volver al Inicio</a>
+            <h1>PD05: Registro y Reflexión de Certificaciones</h1>
+            <p>Evidencia formal y análisis crítico del proceso de formación académica especializada.</p>
+        </div>
+
+        <div class="tabs-menu">
+            <button class="tab-btn active" onclick="openCert(event, 'cert-1')">1. Introducción</button>
+            <button class="tab-btn" onclick="openCert(event, 'cert-2')">2. Redes Básicas</button>
+            <button class="tab-btn" onclick="openCert(event, 'cert-3')">3. Dispositivos</button>
+            <button class="tab-btn" onclick="openCert(event, 'cert-4')">4. Terminales</button>
+            <button class="tab-btn" onclick="openCert(event, 'cert-5')">5. Amenazas</button>
+            <button class="tab-btn" onclick="openCert(event, 'cert-6')">6. Analista Jr</button>
+            <button class="tab-btn" onclick="openCert(event, 'cert-7')">7. Hacker Ético</button>
+        </div>
+
+        <div id="cert-1" class="cert-content active">
+            <div class="cert-layout">
+                <div class="reflection-box">
+                    <h3>Introducción a la Ciberseguridad</h3>
+                    <p class="reflection-text">
+                        Escribe aquí tu reflexión sobre el impacto personal, académico y profesional de este módulo. 
+                        Analiza cómo los conceptos fundamentales de confidencialidad, integridad y disponibilidad (Tríada CIA) 
+                        cambiaron tu perspectiva técnica como estudiante de ingeniería en la UPSLP. 
+                        Es importante destacar los retos enfrentados durante las evaluaciones prácticas, la aplicación real 
+                        de los principios de seguridad digital en la infraestructura moderna y tus comentarios personales 
+                        sobre la relevancia del curso para tu futura carrera en la industria del software o la automatización.
+                    </p>
+                </div>
+                <div class="badge-sidebar">
+                    <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="bd1e8f71-ec8d-447a-9e9a-faf3f6756a5b" data-share-badge-host="https://www.credly.com"></div>
+                    
+                    <a href="pdfs/introduccion_ciberseguridad.pdf" class="btn-download" download>Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="cert-2" class="cert-content">
+            <div class="cert-layout">
+                <div class="reflection-box">
+                    <h3>Conceptos Básicos de Redes</h3>
+                    <p class="reflection-text">
+                        Escribe aquí tu reseña correspondiente al segundo módulo. Puedes enfocar la narrativa en el modelado 
+                        de protocolos, direccionamiento IP y la importancia de comprender la conectividad de red para 
+                        detectar anomalías en el tráfico o vectorizaciones de ataque antes de implementar defensas perimetrales.
+                    </p>
+                </div>
+                <div class="badge-sidebar">
+                    <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="TU_SEGUNDO_BADGE_ID" data-share-badge-host="https://www.credly.com"></div>
+                    <a href="pdfs/conceptos_redes.pdf" class="btn-download" download>Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="cert-3" class="cert-content">
+            <div class="cert-layout">
+                <div class="reflection-box">
+                    <h3>Dispositivos de Red y Configuración Inicial</h3>
+                    <p class="reflection-text">Escribe aquí tu reseña sobre el proceso de configuración y administración de switches y routers...</p>
+                </div>
+                <div class="badge-sidebar">
+                    <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="TU_TERCER_BADGE_ID" data-share-badge-host="https://www.credly.com"></div>
+                    <a href="pdfs/dispositivos_red.pdf" class="btn-download" download>Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cert-4" class="cert-content">
+            <div class="cert-layout">
+                <div class="reflection-box">
+                    <h3>Seguridad en Terminales</h3>
+                    <p class="reflection-text">Escribe aquí tu reseña sobre los mecanismos de protección de endpoints y políticas de hardening...</p>
+                </div>
+                <div class="badge-sidebar">
+                    <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="TU_CUARTO_BADGE_ID" data-share-badge-host="https://www.credly.com"></div>
+                    <a href="pdfs/seguridad_terminales.pdf" class="btn-download" download>Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cert-5" class="cert-content">
+            <div class="cert-layout">
+                <div class="reflection-box">
+                    <h3>Administración de Amenazas Cibernéticas</h3>
+                    <p class="reflection-text">Escribe aquí tu reseña sobre la detección precoz de vectores de ataque informáticos y mitigación de riesgos...</p>
+                </div>
+                <div class="badge-sidebar">
+                    <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="TU_QUINTO_BADGE_ID" data-share-badge-host="https://www.credly.com"></div>
+                    <a href="pdfs/administracion_amenazas.pdf" class="btn-download" download>Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cert-6" class="cert-content">
+            <div class="cert-layout">
+                <div class="reflection-box">
+                    <h3>Carrera Profesional de Analista Junior en Ciberseguridad</h3>
+                    <p class="reflection-text">Escribe aquí tu reseña integral acerca del perfil operativo de un analista dentro de un SOC corporativo...</p>
+                </div>
+                <div class="badge-sidebar">
+                    <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="TU_SEXTO_BADGE_ID" data-share-badge-host="https://www.credly.com"></div>
+                    <a href="pdfs/analista_junior.pdf" class="btn-download" download>Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cert-7" class="cert-content">
+            <div class="cert-layout">
+                <div class="reflection-box">
+                    <h3>Hacker Ético</h3>
+                    <p class="reflection-text">Escribe aquí tu reseña analítica sobre metodologías de intrusión controlada, escaneo defensivo y remediación técnica de vulnerabilidades...</p>
+                </div>
+                <div class="badge-sidebar">
+                    <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="TU_SEPTIMO_BADGE_ID" data-share-badge-host="https://www.credly.com"></div>
+                    <a href="pdfs/hacker_etico.pdf" class="btn-download" download>Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            © 2026 Aaron Mata | Evidencia Académica PD05 | UPSLP
+        </footer>
+    </div>
+
+    <script type="text/javascript" async src="https://cdn.credly.com/assets/utilities/embed.js"></script>
+    
+    <script>
+        function openCert(evt, certId) {
+            let i, certContent, tabBtns;
+            
+            certContent = document.getElementsByClassName("cert-content");
+            for (i = 0; i < certContent.length; i++) {
+                certContent[i].style.display = "none";
+                certContent[i].classList.remove("active");
+            }
+
+            tabBtns = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+
+            document.getElementById(certId).style.display = "block";
+            document.getElementById(certId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
