@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 16: Dilemas Éticos | Aaron Mata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --glass-bg: rgba(255, 255, 255, 0.88); 
+            --accent: #2563eb;
+            --accent-success: #10b981;
+            --accent-danger: #ef4444;
+            --accent-warning: #eab308;
+            --text-dark: #111827;
+            --text-muted: #4b5563;
+            --border: rgba(229, 231, 235, 0.5);
+            --card-inner: rgba(255, 255, 255, 0.65);
+            
+            /* Colores interfaz estilo Google Chrome */
+            --chrome-bg: #dee1e6;
+            --chrome-tab-active: rgba(255, 255, 255, 0.92);
+            --chrome-tab-hover: #e8eaed;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-image: url('imagen.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        aside {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+        main {
+            margin-left: var(--sidebar-width);
+            padding: 3rem 5%;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .header-title {
+            color: white;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .header-title h1 { font-size: 2.3rem; margin: 0 0 0.5rem 0; font-weight: 700; }
+        .header-title p { margin: 0; font-size: 1.1rem; opacity: 0.9; }
+
+        /* Botón de descarga de evidencia PDF (Efecto Glassmorphism Innovador) */
+        .btn-pdf-download {
+            position: absolute;
+            top: 3rem;
+            right: 5%;
+            background: var(--glass-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(8px);
+            padding: 0.7rem 1.3rem;
+            border-radius: 12px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .btn-pdf-download:hover {
+            background: var(--accent-success);
+            color: white;
+            border-color: var(--accent-success);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .meta-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .meta-item { display: flex; flex-direction: column; }
+        .meta-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem; }
+        .meta-value { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); line-height: 1.4; }
+        .meta-value ul { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; }
+
+        .intro-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 2.5rem;
+        }
+        .intro-title { font-size: 1.1rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; }
+        .intro-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-dark); text-align: justify; margin: 0; }
+
+        .table-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+        }
+        
+        .matrix-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        .matrix-table th { background: var(--accent); color: white; padding: 1rem; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+        .matrix-table th:first-child { border-radius: 8px 0 0 8px; }
+        .matrix-table th:last-child { border-radius: 0 8px 8px 0; }
+        .matrix-table td { padding: 1rem; border-bottom: 1px solid var(--border); color: var(--text-dark); line-height: 1.5; }
+        .matrix-table tr:last-child td { border-bottom: none; }
+        .matrix-table tr:hover td { background: rgba(37, 99, 235, 0.04); }
+
+        /* INTERFAZ DE VENTANA GOOGLE CHROME */
+        .browser-window {
+            background: var(--chrome-bg);
+            border-radius: 20px 20px 24px 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border: 1px solid rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .browser-tabs {
+            display: flex;
+            align-items: flex-end;
+            padding-left: 12px;
+            padding-top: 10px;
+            gap: 4px;
+            background: #cbd0d8;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            padding: 0 12px 12px 4px;
+        }
+        .control-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .dot-close { background: #ff5f56; }
+        .dot-minimize { background: #ffbd2e; }
+        .dot-maximize { background: #27c93f; }
+
+        .chrome-tab {
+            background: transparent;
+            border: none;
+            padding: 8px 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #5f6368;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .chrome-tab:hover { background: var(--chrome-tab-hover); color: #3c4043; }
+        .chrome-tab.active { background: var(--chrome-tab-active); color: var(--text-dark); box-shadow: 0 -2px 6px rgba(0,0,0,0.03); }
+
+        .browser-body {
+            background: var(--chrome-tab-active);
+            padding: 2.5rem;
+            min-height: 400px;
+        }
+
+        .case-content { display: none; animation: tabFadeIn 0.35s ease; }
+        .case-content.active { display: block; }
+
+        .case-header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .case-badge {
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .case-title { font-size: 1.4rem; color: var(--text-dark); margin: 0.5rem 0 0 0; font-weight: 700; }
+
+        /* RECURSOS VISUALES MEJORADOS POR CASO */
+        .case-block { background: var(--card-inner); border-left: 4px solid var(--accent); padding: 1.2rem; border-radius: 0 8px 8px 0; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .case-block.justification { border-left-color: var(--accent-success); background: rgba(16, 185, 129, 0.03); }
+        .case-block.law-alert { border-left-color: var(--accent-danger); background: rgba(239, 68, 68, 0.02); }
+        .case-block.ethics-purple { border-left-color: #a855f7; }
+        .case-block.mandate-orange { border-left-color: #f97316; }
+
+        .block-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-dark); letter-spacing: 0.5px; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
+        .reflection-text { margin: 0; font-size: 0.95rem; line-height: 1.6; text-align: justify; }
+
+        /* Etiquetas Visuales de Estado */
+        .status-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .tag-violated { background: rgba(239, 68, 68, 0.15); color: var(--accent-danger); }
+        .tag-respected { background: rgba(16, 185, 129, 0.15); color: var(--accent-success); }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 992px) {
+            .browser-tabs { flex-wrap: wrap; padding-bottom: 6px; }
+            .chrome-tab { border-radius: 8px; margin-bottom: 4px; padding: 8px 16px; }
+            .btn-pdf-download { position: relative; top: 0; right: 0; margin-bottom: 1.5rem; width: 100%; justify-content: center; box-sizing: border-box; }
+        }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+            main { margin-left: 0; padding: 2rem 4%; }
+            .meta-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div style="font-weight: 600; color: var(--accent); padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-shield-halved"></i> Seguridad Informática
+        </div>
+        <nav style="margin-top: 2rem;">
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="../parcial3.html" style="text-decoration: none; color: #4b5563; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-arrow-left"></i> Volver al Parcial 3</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <a href="act16-Equipo2.pdf" class="btn-pdf-download" download>
+            <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> Exportar Documento PDF
+        </a>
+
+        <div class="header-title">
+            <h1>Actividad 16</h1>
+            <p>Análisis de dilemas éticos y marcos normativos en la gestión de ciberseguridad.</p>
+        </div>
+
+        <div class="meta-container">
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-bookmark"></i> Materia / Proyecto</span>
+                <span class="meta-value">Seguridad Informática II<br>Dilemas Éticos de la Ciberseguridad</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-users"></i> Integrantes del Equipo</span>
+                <span class="meta-value">
+                    <ul>
+                        <li>López López Josué Emmanuel</li>
+                        <li>Mata Martínez Aaron Efraim</li>
+                        <li>Rodríguez Hernández Edgar Omar</li>
+                        <li>Rodriguez Morin Estefano Alessandro</li>
+                        <li>Ros Padilla Iván</li>
+                        <li>Salinas Carrillo Mauricio Josafat</li>
+                    </ul>
+                </span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-user-tie"></i> Profesor</span>
+                <span class="meta-value">Servando López Contreras</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-calendar-days"></i> Fecha de Entrega</span>
+                <span class="meta-value">15 de marzo de 2026</span>
+            </div>
+        </div>
+
+        <div class="intro-container">
+            <div class="intro-title"><i class="fa-solid fa-align-left"></i> Introducción</div>
+            <p class="intro-text">
+                En el ejercicio moderno de la ingeniería y la administración de sistemas, la ciberseguridad trasciende la configuración de firewalls o la escritura de scripts defensivos; se intersecta directamente con la responsabilidad legal y los principios deontológicos. Los profesionales del área interactúan de manera constante con entornos sensibles donde la confidencialidad corporativa, la integridad de los datos y el derecho a la privacidad individual pueden entrar en conflicto operativo. Esta actividad académica examina tres escenarios críticos del ámbito corporativo real mediante la aplicación de marcos de evaluación ética y la auditoría de normas informáticas internacionales. El propósito fundamental es desglosar de forma argumentativa el camino que un analista técnico debe seguir para resolver un incidente de seguridad sin comprometer la ética profesional ni la normatividad legal.
+            </p>
+        </div>
+
+        <div class="table-container">
+            <div class="intro-title" style="margin-bottom: 1rem;"><i class="fa-solid fa-table"></i> Matriz Comparativa de Escenarios Analizados</div>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Caso</th>
+                        <th>Origen del Conflicto</th>
+                        <th>Principio Deontológico Vulnerado</th>
+                        <th>Clasificación del Acto</th>
+                        <th>Nivel de Riesgo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 700; color: #ef4444;">Acceso no autorizado interno</td>
+                        <td>Extralimitación de funciones por sospecha interna frente a derechos individuales.</td>
+                        <td>Privacidad de la información y Principio de Menor Privilegio.</td>
+                        <td>Acceso no autorizado e intrusión interna a cuentas institucionales.</td>
+                        <td><span style="background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.8rem;"><i class="fa-solid fa-triangle-exclamation"></i> CRÍTICO</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 700; color: #eab308;">Hallazgo de vulnerabilidad no reportada</td>
+                        <td>Oportunidad de enriquecimiento ilícito frente a la ausencia temporal de un marco contractual ejecutable.</td>
+                        <td>Integridad corporativa, buena fe profesional y divulgación responsable.</td>
+                        <td>Explotación ilícita de fallos de infraestructura con fines de fraude financiero.</td>
+                        <td><span style="background: rgba(234, 179, 8, 0.15); color: #b45309; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.8rem;"><i class="fa-solid fa-circle-exclamation"></i> ALTO</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 700; color: #3b82f6;">Límites éticos en herramientas OSINT</td>
+                        <td>Presión jerárquica para instrumentar datos públicos como herramienta de coacción psicológica.</td>
+                        <td>Límites del alcance de recolección informativa (OSINT) y dignidad humana.</td>
+                        <td>Uso abusivo de datos expuestos para prácticas de hostigamiento y extorsión.</td>
+                        <td><span style="background: rgba(59, 130, 246, 0.15); color: #2563eb; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.8rem;"><i class="fa-solid fa-circle-info"></i> MEDIO</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="browser-window">
+            <div class="browser-tabs">
+                <div class="window-controls">
+                    <span class="control-dot dot-close"></span>
+                    <span class="control-dot dot-minimize"></span>
+                    <span class="control-dot dot-maximize"></span>
+                </div>
+                
+                <button class="chrome-tab active" onclick="switchBrowserTab(event, 'tab-case1')">
+                    <i class="fa-solid fa-user-shield" style="color:#ef4444;"></i> Escenario 1
+                </button>
+                <button class="chrome-tab" onclick="switchBrowserTab(event, 'tab-case2')">
+                    <i class="fa-solid fa-money-bill-trend-up" style="color:#eab308;"></i> Escenario 2
+                </button>
+                <button class="chrome-tab" onclick="switchBrowserTab(event, 'tab-case3')">
+                    <i class="fa-solid fa-magnifying-glass" style="color:#3b82f6;"></i> Escenario 3
+                </button>
+            </div>
+
+            <div class="browser-body">
+                
+                <div id="tab-case1" class="case-content active">
+                    <div class="case-header">
+                        <h2 class="case-title">Escenario 1: Acceso no autorizado interno</h2>
+                        <span class="case-badge" style="background: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Caso 01 • Severidad: Crítica</span>
+                    </div>
+                    
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-file-lines"></i> Descripción del Escenario</div>
+                        <p class="reflection-text">
+                            Trabajas en el área de ciberseguridad de una empresa. Durante una revisión de logs, detectas que un compañero accedió a correos privados del director general sin autorización. El compañero argumenta que lo hizo para "detectar posibles fugas de información".
+                        </p>
+                    </div>
+
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-circle-nodes"></i> Análisis de la Problemática Ética</div>
+                        <p class="reflection-text">
+                            El núcleo del problema radica en determinar si un objetivo presuntamente benéfico o preventivo (proteger los secretos comerciales de la empresa frente a fugas) valida que un técnico actúe de manera unilateral rompiendo los controles de seguridad institucionales. Se confronta la ética procedimental (seguir los canales de auditoría autorizados) contra el criterio arbitrario de un colaborador que se autoasigna facultades de espionaje corporativo bajo una justificación bienintencionada pero ilegal.
+                        </p>
+                    </div>
+
+                    <div class="case-block ethics-purple">
+                        <div class="block-title"><i class="fa-solid fa-scale-balanced"></i> Evaluación Teórica Alternativa</div>
+                        <p class="reflection-text">
+                            <strong>Perspectiva Utilitarista:</strong> La acción del compañero resulta nociva para el ecosistema general. Aunque su meta fuera salvar información, romper la barrera de confianza genera un estado de paranoia y desconfianza absoluta en el equipo técnico. Los logs demuestran que el costo de vulnerar el orden de privacidad supera cualquier beneficio especulativo.<br><br>
+                            <strong>Enfoque Deontológico (Deber):</strong> Los administradores de sistemas y analistas de ciberseguridad tienen la obligación moral inquebrantable de respetar las políticas de acceso formalmente establecidas. Actuar por cuenta propia destruye el principio de legalidad interna; la regla general debe prohibir tajantemente cualquier lectura de comunicaciones privadas que no cuente con un ticket de auditoría explícito o un requerimiento legal judicializado.<br><br>
+                            <strong>Enfoque de Justicia Dinámica:</strong> La equidad dentro de una corporación exige que las investigaciones sigan un debido proceso transparente. Si se sospecha del director general o de una fuga, existen comités de cumplimiento específicos para ejecutar revisiones; permitir que un empleado rompa las rules a su discreción anula las garantías corporativas de cualquier trabajador.
+                        </p>
+                    </div>
+
+                    <div class="case-block mandate-orange">
+                        <div class="block-title"><i class="fa-solid fa-clipboard-check"></i> Evaluación de Normas Fundamentales de la Informática</div>
+                        <div class="reflection-text">
+                            <span class="status-tag tag-violated"><i class="fa-solid fa-circle-xmark"></i> Violado</span> <strong>Mandamiento 3:</strong> Se quebrantó por completo el principio de no explorar datos digitales ajenos. Un analista de seguridad no puede invocar su puesto para leer correos sin un mandato formal de investigación.<br><br>
+                            <span class="status-tag tag-violated"><i class="fa-solid fa-circle-xmark"></i> Violado</span> <strong>Mandamiento 10:</strong> Se omitió la consideración profesional hacia los colaboradores al invadir su entorno privado de comunicación sin una autorización legal de soporte técnico o una orden jerárquica válida.
+                        </div>
+                    </div>
+
+                    <div class="case-block law-alert">
+                        <div class="block-title"><i class="fa-solid fa-gavel"></i> Encuadre Legal Adicional</div>
+                        <p class="reflection-text">
+                            <strong>Tipificación:</strong> Acceso ilícito a sistemas de comunicación protegidos y violación sistemática de la confidencialidad de los datos. Esta conducta constituye un abuso directo de funciones operativas dentro de la infraestructura tecnológica empresarial.
+                        </p>
+                    </div>
+
+                    <div class="case-block justification">
+                        <div class="block-title"><i class="fa-solid fa-user-shield"></i> Justificación Técnica Auténtica y Ruta de Mitigación</div>
+                        <p class="reflection-text">
+                            <strong>Postura técnica original:</strong> Como responsables de velar por la integridad técnica de la infraestructura, nuestra labor principal es asegurar que los registros de auditoría sigan siendo inmutables y sirvan como prueba fehaciente. La conducta correcta dictamina **generar un reporte técnico inmediato del hallazgo encontrado en los logs**, empaquetar la evidencia criptográficamente y remitir el incidente de forma confidencial al Oficial de Cumplimiento (Compliance Officer) o al área corporativa de Recursos Humanos.<br><br>
+                            Un especialista en ciberseguridad no debe encubrir el evento ni confrontar de manera informal al compañero, ya que esto podría alertarlo para borrar evidencia técnica o viciar el proceso institucional. Se debe seguir de forma estricta el protocolo de respuesta ante incidentes internos (Insider Threat Protocol).
+                        </p>
+                    </div>
+                </div>
+
+                <div id="tab-case2" class="case-content">
+                    <div class="case-header">
+                        <h2 class="case-title">Escenario 2: Hallazgo de vulnerabilidad no reportada</h2>
+                        <span class="case-badge" style="background: #eab308;"><i class="fa-solid fa-circle-exclamation"></i> Caso 02 • Severidad: Alta</span>
+                    </div>
+                    
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-file-lines"></i> Descripción del Escenario</div>
+                        <p class="reflection-text">
+                            Durante un pentest encuentras una vulnerabilidad crítica en un sistema financiero que permite extraer dinero. El cliente aún no ha firmado el contrato final y tú sabes que podrías explotarla sin ser detectado.
+                        </p>
+                    </div>
+
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-circle-nodes"></i> Análisis de la Problemática Ética</div>
+                        <p class="reflection-text">
+                            El escenario plantea un conflicto de integridad profesional extrema: la oportunidad de un beneficio financiero ilícito inmediato, amparado bajo el anonimato técnico y la falta de un cierre de contrato formal, frente a la responsabilidad contractual implícita y los códigos éticos globales que rigen las actividades de hacking ético y auditoría de software.
+                        </p>
+                    </div>
+
+                    <div class="case-block ethics-purple">
+                        <div class="block-title"><i class="fa-solid fa-scale-balanced"></i> Evaluación Teórica Alternativa</div>
+                        <p class="reflection-text">
+                            <strong>Perspectiva Utilitarista:</strong> La extracción sigilosa de capital perjudica directamente el patrimonio de los usuarios finales y socava la viabilidad económica de la entidad. Por el contrario, reportar de inmediato la falla blinda la estabilidad operativa del cliente, resguarda el prestigio de la consultora de seguridad y asegura ingresos legítimos a largo plazo por servicios profesionales éticos.<br><br>
+                            <strong>Enfoque Deontológico (Deber):</strong> Un auditor técnico se rige bajo la premisa absoluta de actuar como un escudo defensivo. La ausencia de una firma física final en un documento no extingue la obligación ética ni los acuerdos precontractuales de confidencialidad (NDA). La buena fe profesional obliga a reportar de manera exacta todo agujero de seguridad descubierto en los activos asignados.<br><br>
+                            <strong>Enfoque de Justicia Dinámica:</strong> El ecosistema financiero se sustenta en la confianza pública. Utilizar habilidades técnicas avanzadas para el desfalco rompe el principio de equidad social, explotando el conocimiento técnico especializado para vulnerar la seguridad de plataformas esenciales de los ciudadanos.
+                        </p>
+                    </div>
+
+                    <div class="case-block mandate-orange">
+                        <div class="block-title"><i class="fa-solid fa-clipboard-check"></i> Evaluación de Normas Fundamentales de la Informática</div>
+                        <div class="reflection-text">
+                            <span class="status-tag tag-respected"><i class="fa-solid fa-circle-check"></i> Respetado</span> <strong>Mandamiento 1:</strong> Se acata fielmente al negarse tajantemente a utilizar las capacidades de cómputo avanzado o exploits para infligir daños directos o pérdidas al patrimonio ajeno.<br><br>
+                            <span class="status-tag tag-respected"><i class="fa-solid fa-circle-check"></i> Respetado</span> <strong>Mandamiento 4:</strong> Se respeta de manera absoluta al rechazar el uso del entorno tecnológico como herramienta de sustracción ilegal de activos financieros.<br><br>
+                            <span class="status-tag tag-respected"><i class="fa-solid fa-circle-check"></i> Respetado</span> <strong>Mandamiento 9:</strong> Se cumple al sopesar el impacto social devastador que causaría dejar activa o explotar una brecha técnica en un software bancario masivo.
+                        </div>
+                    </div>
+
+                    <div class="case-block law-alert">
+                        <div class="block-title"><i class="fa-solid fa-gavel"></i> Encuadre Legal Adicional</div>
+                        <p class="reflection-text">
+                            <strong>Tipificación:</strong> Delito patrimonial electrónico masivo, fraude bancario mediante manipulación de datos informáticos y explotación no autorizada de sistemas críticos. A pesar del limbo en el contrato final, esta acción penal califica como robo calificado y piratería digital.
+                        </p>
+                    </div>
+
+                    <div class="case-block justification">
+                        <div class="block-title"><i class="fa-solid fa-user-shield"></i> Justificación Técnico Auténtica y Ruta de Mitigación</div>
+                        <p class="reflection-text">
+                            <strong>Postura técnica original:</strong> En el marco profesional de las auditorías de seguridad perimetral, la conducta técnica obligatoria consiste en **frenar el desarrollo del exploit, registrar de inmediato los vectores técnicos del fallo crítico con capturas de pantalla de la traza de red y armar un Reporte Técnico de Vulnerabilidad Crítica**. Este documento se debe enviar de manera urgente mediante canales cifrados al enlace técnico principal de la institución financiera para su mitigación inmediata.<br><br>
+                            El actuar ético del pentester se basa en los lineamientos del *Responsible Disclosure* (Divulgación Responsable). Explotar la brecha representa una violación directo que destruye la reputación del consultor, revoca certificaciones internacionales de seguridad (como CEH u OSCP) e implica repercusiones penales directas con las autoridades financieras locales.
+                        </p>
+                    </div>
+                </div>
+
+                <div id="tab-case3" class="case-content">
+                    <div class="case-header">
+                        <h2 class="case-title">Escenario 3: Límites éticos en herramientas OSINT</h2>
+                        <span class="case-badge" style="background: #3b82f6;"><i class="fa-solid fa-circle-info"></i> Caso 03 • Severidad: Media</span>
+                    </div>
+                    
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-file-lines"></i> Descripción del Escenario</div>
+                        <p class="reflection-text">
+                            Estás investigando a una persona sospechosa de fraude. Encuentras información personal (dirección, familia, hábitos) en fuentes abiertas. Tu superior te pide usar esa información para presionarlo psicológicamente.
+                        </p>
+                    </div>
+
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-circle-nodes"></i> Análisis de la Problemática Ética</div>
+                        <p class="reflection-text">
+                            El conflicto técnico-ético se centra en discernir la legalidad del alcance en las investigaciones de fuentes abiertas (OSINT). Se debate si el hecho de que una información sea de acceso público autoriza al personal de ciberseguridad a instrumentar dichos datos para realizar coerción psicológica, confrontando la obediencia laboral requerida por la empresa frente a los límites éticos y legales que prohíben el acoso y el hostigamiento.
+                        </p>
+                    </div>
+
+                    <div class="case-block ethics-purple">
+                        <div class="block-title"><i class="fa-solid fa-scale-balanced"></i> Evaluación Teórica Alternativa</div>
+                        <p class="reflection-text">
+                            <strong>Perspectiva Utilitarista:</strong> La implementación de estrategias de acoso psicológico contamina de origen cualquier proceso de auditoría o investigación corporativa. Si el sospechoso decide denunciar la coacción, todo el expediente probatorio de fraude recopilado de forma legítima podría ser desestimado en un juicio legal debido a malas prácticas del equipo de ciberseguridad, dejando el delito impune. Actuar bajo la ley maximiza la efectividad real para la empresa.<br><br>
+                            <strong>Enfoque Deontológico (Deber):</strong> Las técnicas de ciberinteligencia y OSINT tienen como único fin el descubrimiento de hechos objetivos y el análisis de riesgos. Desviar estas herramientas hacia el hostigamiento o el doxxing viola el principio de integridad profesional. Un investigador corporativo no cuenta con atribuciones penales ni punitivas; su deber estricto es recopilar hechos, no actuar como ejecutor o extorsionador.<br><br>
+                            <strong>Enfoque de Justicia Dinámica:</strong> El debido proceso y el respeto elemental a la dignidad humana aplican de igual manera para los sospechosos de un delito corporativo. Romper el marco legal recurriendo a la coacción degrada las prácticas internas de seguridad de la información y deslegitima el estándar ético de los analistas de la organización.
+                        </p>
+                    </div>
+
+                    <div class="case-block mandate-orange">
+                        <div class="block-title"><i class="fa-solid fa-clipboard-check"></i> Evaluación de Normas Fundamentales de la Informática</div>
+                        <div class="reflection-text">
+                            <span class="status-tag tag-violated"><i class="fa-solid fa-circle-xmark"></i> Violado en caso de acatar</span> <strong>Mandamiento 1:</strong> Se violaría de forma flagrante al emplear la tecnología y los datos consolidados digitalmente para provocar un daño psicológico deliberado e intimidar a un individuo.<br><br>
+                            <span class="status-tag tag-violated"><i class="fa-solid fa-circle-xmark"></i> Violado en caso de acatar</span> <strong>Mandamiento 10:</strong> Se omitiría por completo al usar recursos informáticos de inteligencia para violentar el espacio personal y familiar del investigado, operando fuera del marco de respeto y profesionalismo.
+                        </div>
+                    </div>
+
+                    <div class="case-block law-alert">
+                        <div class="block-title"><i class="fa-solid fa-gavel"></i> Encuadre Legal Adicional</div>
+                        <p class="reflection-text">
+                            <strong>Tipificación:</strong> Delito de amenazas coordinadas, acoso por medios electrónicos y extorsión asistida por herramientas tecnológicas de recolección de información. El uso inadecuado de datos personales expuestos invalida el carácter ético de la investigación OSINT.
+                        </p>
+                    </div>
+
+                    <div class="case-block justification">
+                        <div class="block-title"><i class="fa-solid fa-user-shield"></i> Justificación Técnico Auténtica y Ruta de Mitigación</div>
+                        <p class="reflection-text">
+                            <strong>Postura técnica original:</strong> Un profesional ético de la ciberseguridad debe mantener una **negativa firme y asertiva ante solicitudes corporativas que violen los derechos civiles**. El procedimiento técnico correcto es plasmar los datos financieros o técnicos objetivos vinculados al fraude de forma clara dentro de un reporte de inteligencia forense formal, el cual debe ser turnado exclusivamente a la Dirección Jurídica o al Representante Legal de la empresa para que actúen mediante las instancias judiciales competentes.<br><br>
+                            Si el superior directo ejerce presión o amenaza laboral para forzar el uso de técnicas de coacción, el analista de seguridad informática debe respaldar sus reportes y escalar formalmente el suceso ante la Dirección de Recursos Humanos o activar el protocolo a través del Canal Interno de Denuncias Éticas de la organización de forma inmediata.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchBrowserTab(evt, caseId) {
+            let i, caseContent, chromeTabs;
+            
+            caseContent = document.getElementsByClassName("case-content");
+            for (i = 0; i < caseContent.length; i++) {
+                caseContent[i].style.display = "none";
+                caseContent[i].classList.remove("active");
+            }
+
+            chromeTabs = document.getElementsByClassName("chrome-tab");
+            for (i = 0; i < chromeTabs.length; i++) {
+                chromeTabs[i].classList.remove("active");
+            }
+
+            document.getElementById(caseId).style.display = "block";
+            document.getElementById(caseId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>

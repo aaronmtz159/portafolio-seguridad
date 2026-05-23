@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 18: Modelo Diamante de Análisis de Intrusiones | Aaron Mata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --glass-bg: rgba(255, 255, 255, 0.88); 
+            --accent: #2563eb;
+            --accent-success: #10b981;
+            --accent-warning: #eab308;
+            --accent-info: #3b82f6;
+            --accent-purple: #a855f7;
+            --text-dark: #111827;
+            --text-muted: #4b5563;
+            --border: rgba(229, 231, 235, 0.5);
+            --card-inner: rgba(255, 255, 255, 0.65);
+            
+            /* Colores interfaz estilo Google Chrome */
+            --chrome-bg: #dee1e6;
+            --chrome-tab-active: rgba(255, 255, 255, 0.92);
+            --chrome-tab-hover: #e8eaed;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-image: url('imagen.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        aside {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+        main {
+            margin-left: var(--sidebar-width);
+            padding: 3rem 5%;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .header-title {
+            color: white;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .header-title h1 { font-size: 2.3rem; margin: 0 0 0.5rem 0; font-weight: 700; }
+        .header-title p { margin: 0; font-size: 1.1rem; opacity: 0.9; }
+
+        /* Botón de descarga de evidencia PDF - Configurado en verde éxito */
+        .btn-pdf-download {
+            position: absolute;
+            top: 3rem;
+            right: 5%;
+            background: var(--accent-success);
+            border: 1px solid var(--accent-success);
+            backdrop-filter: blur(8px);
+            padding: 0.7rem 1.3rem;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-pdf-download:hover {
+            background: #059669;
+            border-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .meta-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .meta-item { display: flex; flex-direction: column; }
+        .meta-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem; }
+        .meta-value { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); line-height: 1.4; }
+        .meta-value ul { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; }
+
+        .intro-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 2.5rem;
+        }
+        .intro-title { font-size: 1.2rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;}
+        .intro-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-dark); text-align: justify; margin: 0; }
+
+        /* INTERFAZ DE VENTANA GOOGLE CHROME */
+        .browser-window {
+            background: var(--chrome-bg);
+            border-radius: 20px 20px 24px 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border: 1px solid rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .browser-tabs {
+            display: flex;
+            align-items: flex-end;
+            padding-left: 12px;
+            padding-top: 10px;
+            gap: 4px;
+            background: #cbd0d8;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        .browser-tabs::-webkit-scrollbar { height: 0px; }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            padding: 0 12px 12px 4px;
+        }
+        .control-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .dot-close { background: #ff5f56; }
+        .dot-minimize { background: #ffbd2e; }
+        .dot-maximize { background: #27c93f; }
+
+        .chrome-tab {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #5f6368;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .chrome-tab:hover { background: var(--chrome-tab-hover); color: #3c4043; }
+        .chrome-tab.active { background: var(--chrome-tab-active); color: var(--text-dark); box-shadow: 0 -2px 6px rgba(0,0,0,0.03); }
+
+        .browser-body {
+            background: var(--chrome-tab-active);
+            padding: 2.5rem;
+            min-height: 400px;
+        }
+
+        .case-content { display: none; animation: tabFadeIn 0.35s ease; }
+        .case-content.active { display: block; }
+
+        /* TABLAS Y BLOQUES INTERNOS */
+        .table-container {
+            background: var(--card-inner);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .matrix-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        .matrix-table th { background: var(--accent); color: white; padding: 1.2rem; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+        .matrix-table th:first-child { border-radius: 16px 0 0 0; }
+        .matrix-table th:last-child { border-radius: 0 16px 0 0; }
+        .matrix-table td { padding: 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--text-dark); line-height: 1.5; vertical-align: top; }
+        .matrix-table tr:last-child td { border-bottom: none; }
+        .matrix-table tr:hover td { background: rgba(37, 99, 235, 0.03); }
+
+        .case-block { background: rgba(255, 255, 255, 0.7); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 0 12px 12px 0; margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .case-block.purple-block { border-left-color: var(--accent-purple); }
+        .case-block.warning-block { border-left-color: var(--accent-warning); }
+        .case-block.success-block { border-left-color: var(--accent-success); }
+        
+        .block-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--text-dark); letter-spacing: 0.5px; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 8px; }
+        .reflection-text { margin: 0; font-size: 0.95rem; line-height: 1.7; text-align: justify; }
+
+        /* IMAGEN PLACEHOLDER */
+        .image-placeholder {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            background: rgba(248, 250, 252, 0.6);
+            overflow: hidden;
+            margin-top: 2rem;
+            position: relative;
+        }
+        .image-placeholder img { width: 100%; height: 100%; object-fit: contain; border-radius: 14px; }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 992px) {
+            .btn-pdf-download { position: relative; top: 0; right: 0; margin-bottom: 1.5rem; width: 100%; justify-content: center; box-sizing: border-box; }
+        }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+            main { margin-left: 0; padding: 2rem 4%; }
+            .meta-container { grid-template-columns: 1fr; }
+            .browser-body { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div style="font-weight: 600; color: var(--accent); padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-shield-halved"></i> Seguridad Informática
+        </div>
+        <nav style="margin-top: 2rem;">
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="../parcial3.html" style="text-decoration: none; color: #4b5563; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-arrow-left"></i> Volver al Parcial 3</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <a href="act18-Equipo2.pdf" class="btn-pdf-download" download>
+            <i class="fa-solid fa-file-pdf"></i> Exportar Documento PDF
+        </a>
+
+        <div class="header-title">
+            <h1>Actividad 18</h1>
+            <p>Análisis de intrusiones mediante el Modelo Diamante y Cyber Kill Chain.</p>
+        </div>
+
+        <div class="meta-container">
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-bookmark"></i> Materia / Proyecto</span>
+                <span class="meta-value">Seguridad Informática II<br>Act 18. Modelo Diamante</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-users"></i> Integrantes del Equipo</span>
+                <span class="meta-value">
+                    <ul>
+                        <li>López López Josué Emmanuel (182078)</li>
+                        <li>Mata Martínez Aaron Efraim (179419)</li>
+                        <li>Rodríguez Hernández Edgar Omar (177888)</li>
+                        <li>Rodriguez Morin Estefano Alessandro (178584)</li>
+                        <li>Ros Padilla Iván (177573)</li>
+                        <li>Salinas Carrillo Mauricio Josafat (177406)</li>
+                    </ul>
+                </span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-user-tie"></i> Profesor</span>
+                <span class="meta-value">Servando López Contreras</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fa-solid fa-calendar-days"></i> Fecha de Entrega</span>
+                <span class="meta-value">15 de mayo de 2026</span>
+            </div>
+        </div>
+
+        <div class="intro-container">
+            <div class="intro-title"><i class="fa-solid fa-gem"></i> Contexto Analítico: El Modelo Diamante</div>
+            <p class="intro-text">
+                El análisis de amenazas modernas exige marcos metodológicos robustos que permitan correlacionar los hallazgos técnicos con la inteligencia procesable. El Modelo Diamante de Análisis de Intrusiones se establece como un paradigma ontológico que describe de manera formal cualquier evento de seguridad a través de la relación fundamental entre cuatro vértices: <strong>Adversario, Capacidad, Infraestructura y Víctima</strong>. <br><br>
+                En el presente reporte, aplicamos esta metodología, en sinergia con el framework de Cyber Kill Chain, para diseccionar el incidente crítico perpetrado por el grupo de cibercrimen de élite <em>ShinyHunters</em> contra la plataforma Canvas LMS de Instructure en mayo de 2026. A través de la descomposición de los hilos de actividad y el análisis de movimiento lateral (Pivoting), justificaremos la ruta de ataque que derivó en la exfiltración masiva de registros a nivel mundial y evaluaremos los fallos de resiliencia en la infraestructura en la nube.
+            </p>
+        </div>
+
+        <div class="browser-window">
+            <div class="browser-tabs">
+                <div class="window-controls">
+                    <span class="control-dot dot-close"></span>
+                    <span class="control-dot dot-minimize"></span>
+                    <span class="control-dot dot-maximize"></span>
+                </div>
+                
+                <button class="chrome-tab active" onclick="switchBrowserTab(event, 'tab-parte1')">
+                    <i class="fa-solid fa-cube" style="color: var(--accent);"></i> Parte 01. Comprensión
+                </button>
+                <button class="chrome-tab" onclick="switchBrowserTab(event, 'tab-parte2')">
+                    <i class="fa-solid fa-magnifying-glass-chart" style="color: var(--accent-purple);"></i> Parte 02. Análisis del Evento
+                </button>
+                <button class="chrome-tab" onclick="switchBrowserTab(event, 'tab-parte3')">
+                    <i class="fa-solid fa-link" style="color: var(--accent-warning);"></i> Parte 03. Kill Chain
+                </button>
+                <button class="chrome-tab" onclick="switchBrowserTab(event, 'tab-parte4')">
+                    <i class="fa-solid fa-network-wired" style="color: var(--accent-success);"></i> Parte 04. Hilos de Actividad
+                </button>
+            </div>
+
+            <div class="browser-body">
+                
+                <div id="tab-parte1" class="case-content active">
+                    <h2 class="header-title" style="color: var(--text-dark); margin-bottom: 1.5rem; text-shadow: none;">Parte 01. Comprensión del modelo (Caso Canvas - Mayo 2026)</h2>
+                    
+                    <div class="table-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>Elemento</th>
+                                    <th>Descripción</th>
+                                    <th>Ejemplo práctico (Caso Canvas 2026)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent);">Adversario</td>
+                                    <td>El actor o grupo responsable del ataque.</td>
+                                    <td><strong>ShinyHunters:</strong> Grupo de ciberdelincuencia de élite que reapareció para realizar este ataque masivo y extorsión pública.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent);">Capacidad</td>
+                                    <td>Herramientas, técnicas y procedimientos (TTPs) utilizados.</td>
+                                    <td>Explotación de vulnerabilidad en cuentas "Free-for-Teacher" y uso de fallos de día cero (0-day) en el sistema de tickets de soporte para escalar privilegios.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent);">Infraestructura</td>
+                                    <td>Recursos lógicos que conectan al adversario con la víctima.</td>
+                                    <td>Infraestructura de AWS (Amazon Web Services) de Instructure, dominios de C2 ocultos y la red TOX para las comunicaciones de extorsión.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent);">Víctima</td>
+                                    <td>El objetivo principal y secundarios del ataque.</td>
+                                    <td>Canvas (Instructure) como víctima primaria; casi 9,000 instituciones educativas y sus 275 millones de usuarios como víctimas secundarias.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-user-secret"></i> Perfilamiento del Adversario y sus Capacidades</div>
+                        <p class="reflection-text">
+                            El análisis del comportamiento de <em>ShinyHunters</em> revela un perfil de amenaza altamente motivado por fines económicos y de prestigio en la Dark Web. Demostraron una gran destreza técnica al no limitarse al robo de credenciales estáticas, sino que orquestaron un encadenamiento de vulnerabilidades sofisticado. Su capacidad técnica les permitió abusar del entorno gratuito de Canvas ("Free-for-Teacher") y pivotar mediante un exploit de día cero (0-day) en los sistemas de soporte, lo que demuestra un profundo proceso de reconocimiento y desarrollo de exploits a la medida. Además, ejercieron presión psicológica y mediática utilizando la red X (antes Twitter) para publicar paneles de administración comprometidos.
+                        </p>
+                    </div>
+
+                    <div class="case-block warning-block">
+                        <div class="block-title"><i class="fa-solid fa-server"></i> Vector de Infraestructura Crítica</div>
+                        <p class="reflection-text">
+                            La gravedad de la intrusión no residió en un malware destructivo (como el ransomware tradicional de cifrado), sino en el dominio de la topología en la nube del objetivo. El vértice de infraestructura fue vulnerado drásticamente cuando los atacantes lograron acceso lateral a los <em>buckets</em> de almacenamiento dentro de la nube de AWS de Instructure. Esta posición de privilegio no saneada fue el punto de inflexión que permitió la exfiltración silenciosa y masiva de los registros educativos sin detonar alertas críticas a tiempo.
+                        </p>
+                    </div>
+                </div>
+
+                <div id="tab-parte2" class="case-content">
+                    <h2 class="header-title" style="color: var(--text-dark); margin-bottom: 1.5rem; text-shadow: none;">Parte 02. Análisis de evento (Modelo Diamante: Caso Canvas Mayo 2026)</h2>
+                    
+                    <div class="table-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr style="background: var(--accent-purple);">
+                                    <th>Metacaracterística</th>
+                                    <th>Descripción del evento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent-purple);">Marca de tiempo</td>
+                                    <td>30 de abril al 12 de mayo de 2026. El ataque inicial fue el 30/04; la segunda intrusión y defacement ocurrieron el 07/05, con cierre de negociaciones el 11/05.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent-purple);">Fase</td>
+                                    <td>Acciones sobre los objetivos (Exfiltración y Extorsión). El evento incluyó el robo de 3.65 TB de datos y el compromiso de los portales de inicio de sesión (defacement).</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent-purple);">Resultado</td>
+                                    <td>Exitoso (Crítico). ShinyHunters logró la exfiltración masiva y forzó a Instructure a pagar un rescate para evitar la filtración de 275 millones de registros.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent-purple);">Dirección</td>
+                                    <td>Multidireccional. Outbound para la exfiltración de los 3.65 TB e Inbound para el compromiso de los portales de login (330 instituciones afectadas directamente).</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent-purple);">Metodología</td>
+                                    <td>Explotación de vulnerabilidad en cuentas "Free-for-Teacher". Usaron estas cuentas para escalar privilegios y acceder a sistemas de soporte/producción.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: var(--accent-purple);">Recursos</td>
+                                    <td>Vulnerabilidad de día cero en tickets de soporte, infraestructura de almacenamiento AWS, y plataforma de comunicación cifrada TOX para la negociación.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="case-block purple-block">
+                        <div class="block-title"><i class="fa-solid fa-chart-line"></i> Impacto Cuantitativo y Extensión del Daño</div>
+                        <p class="reflection-text">
+                            Desde la óptica analítica, el evento se clasifica como Crítico y Exitoso. La métrica de volumen resulta alarmante: la extracción de <strong>3.65 Terabytes de datos</strong> lo consolida como uno de los mayores robos documentados en el sector educativo tecnológico. El impacto trascendió los sistemas corporativos para afectar directamente la operatividad académica de casi 9,000 escuelas a nivel global durante un periodo sumamente sensible (semana de evaluaciones finales).
+                        </p>
+                    </div>
+                    
+                    <div class="case-block">
+                        <div class="block-title"><i class="fa-solid fa-skull-crossbones"></i> Fallas en la Erradicación y Persistencia del Adversario</div>
+                        <p class="reflection-text">
+                            Uno de los hallazgos técnicos más importantes para nutrir el Modelo Diamante en este caso fue la demostración de <strong>persistencia sostenida</strong> por parte de <em>ShinyHunters</em>. A pesar de los esfuerzos iniciales de respuesta a incidentes de Instructure, el grupo logró reingresar al entorno el 7 de mayo de 2026. Su capacidad para volver a vulnerar el perímetro y burlarse públicamente de los parches de seguridad aplicados evidenció que la infraestructura comprometida no había sido saneada correctamente, manteniendo túneles y puertas traseras persistentes.
+                        </p>
+                    </div>
+                </div>
+
+                <div id="tab-parte3" class="case-content">
+                    <h2 class="header-title" style="color: var(--text-dark); margin-bottom: 1.5rem; text-shadow: none;">Parte 03. Relación con la Kill Chain</h2>
+                    
+                    <div class="table-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr style="background: var(--accent-warning);">
+                                    <th>Evento</th>
+                                    <th>Fase Kill Chain (Lockheed Martin)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 700; color: #b45309;">Envío de phishing</td>
+                                    <td><strong>Entrega (Delivery):</strong> Los atacantes enviaron correos dirigidos a personal con cuentas "Free-for-Teacher" para obtener credenciales iniciales.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: #b45309;">Detección de malware</td>
+                                    <td><strong>Instalación (Installation):</strong> Se refiere al momento en que el sistema detecta la presencia de scripts maliciosos o herramientas de persistencia dejadas por el grupo.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: #b45309;">Ejecución del malware</td>
+                                    <td><strong>Explotación (Exploitation):</strong> El código malicioso aprovecha la vulnerabilidad de día cero en el sistema de tickets de soporte para elevar privilegios.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 700; color: #b45309;">Conexión a C2</td>
+                                    <td><strong>Comando y Control (C2):</strong> El canal establecido para que ShinyHunters enviara comandos a la infraestructura de Canvas y coordinara la exfiltración.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="case-block warning-block">
+                        <div class="block-title"><i class="fa-solid fa-bullseye"></i> Extensión de la Fase Final: Acciones sobre los Objetivos</div>
+                        <p class="reflection-text">
+                            La correlación de los eventos con la metodología <em>Cyber Kill Chain</em> de Lockheed Martin evidencia un ciclo de intrusión completo. Si bien la tabla superior mapea la cadena de suministro táctico de las herramientas maliciosas, el incidente de mayo de 2026 se caracterizó por la brutal contundencia de su última etapa. La fase de <strong>Acciones sobre los objetivos (Actions on Objectives)</strong> operó en dos vectores simultáneos:
+                        </p>
+                        <ul style="color: var(--text-dark); font-size: 0.95rem; line-height: 1.6; margin-top: 10px;">
+                            <li><strong>Exfiltración de Datos:</strong> El empaquetamiento y robo sistemático y silencioso de los 275 millones de registros de estudiantes y docentes contenidos en la base de datos central.</li>
+                            <li><strong>Ciberextorsión y Daño a la Integridad:</strong> A diferencia de tácticas puramente furtivas, el grupo optó por una extorsión agresiva utilizando la red descentralizada TOX, amenazando la reputación de la empresa tras ejecutar <em>defacements</em> en los portales de autenticación de diversas instituciones.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="tab-parte4" class="case-content">
+                    <h2 class="header-title" style="color: var(--text-dark); margin-bottom: 1.5rem; text-shadow: none;">Parte 04. Hilos de Actividad y Movimiento Lateral (Pivoting)</h2>
+                    
+                    <div class="case-block success-block">
+                        <div class="block-title"><i class="fa-solid fa-laptop-code"></i> Hilo 1: Compromiso Inicial y Cabeza de Playa (Víctima 1 - Administrador)</div>
+                        <p class="reflection-text" style="margin-bottom: 15px;">
+                            El primer hilo de actividad documenta la fractura del perímetro externo de seguridad, donde el adversario logra establecer su base de operaciones primigenia dentro de la red corporativa. La secuencia táctica ejecutada fue la siguiente:
+                        </p>
+                        <ul style="color: var(--text-dark); font-size: 0.95rem; line-height: 1.6;">
+                            <li><strong>Evento 1:</strong> Envío y apertura de correos de Phishing dirigidos al personal (Fase: Entrega).</li>
+                            <li><strong>Evento 2:</strong> Infección e instalación de cargas maliciosas ocultas tras la interacción con el adjunto (Fase: Instalación).</li>
+                            <li><strong>Evento 3:</strong> El host comprometido abre una conexión externa hacia el servidor C2 del atacante para aguardar instrucciones de red (Fase: Comando y Control).</li>
+                            <li><strong>Evento 4:</strong> Reconfiguración del equipo infectado para actuar como un <em>Proxy/Jump box</em>. El atacante aseguró un punto de apoyo interno válido, eludiendo controles perimetrales.</li>
+                        </ul>
+                    </div>
+
+                    <div class="case-block success-block" style="border-left-color: var(--accent-info);">
+                        <div class="block-title" style="color: var(--accent-info);"><i class="fa-solid fa-database"></i> Hilo 2: Exfiltración de Datos (Víctima 2 - Servidor de Base de Datos AWS)</div>
+                        <p class="reflection-text" style="margin-bottom: 15px;">
+                            Una vez superado el perímetro, el atacante abusó de la confianza implícita de la intranet. Utilizando la infraestructura de la "Víctima 1" (el administrador), se redirigió el flujo de ataque hacia el objetivo crítico real.
+                        </p>
+                        <ul style="color: var(--text-dark); font-size: 0.95rem; line-height: 1.6;">
+                            <li><strong>Evento 1:</strong> Ejecución de escaneos de red internos desde el host administrativo para mapear la topología del data center en la nube (Fase: Reconocimiento interno).</li>
+                            <li><strong>Evento 2:</strong> Despliegue de exploits internos o reutilización de tokens robados para escalar privilegios sobre los servidores de almacenamiento (Fase: Explotación).</li>
+                            <li><strong>Evento 3:</strong> Tunelización y extracción clandestina de 3.65 TB de registros hacia la red externa, camuflando el tráfico a través del <em>Jump box</em> original (Fase: Acciones sobre los objetivos).</li>
+                        </ul>
+                    </div>
+
+                    <div class="case-block purple-block">
+                        <div class="block-title"><i class="fa-solid fa-route"></i> Justificación de la Relación: Pivoting (Salto Transversal)</div>
+                        <p class="reflection-text">
+                            Dentro de la ontología del Modelo Diamante, la relación entre ambos hilos se califica técnicamente como un <strong>Ataque Transversal</strong>. El vértice de la "Víctima 1" sufre una mutación crítica: deja de ser un simple objetivo pasivo para transformarse lógicamente en un vértice de <strong>Infraestructura</strong> activa controlada por el adversario. Para los sistemas de monitoreo y logs de la Víctima 2 (los servidores de base de datos), las solicitudes maliciosas parecían provenir de una dirección IP interna confiable y validada, lo que enmascaró la verdadera identidad de <em>ShinyHunters</em> y garantizó la invisibilidad operacional de la intrusión.
+                        </p>
+                    </div>
+
+                    <div class="image-placeholder">
+                        <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Diagrama Analítico de Intrusión (Pivoting)</span>
+                            <div class="image-placeholder">
+                                <img src="act18img.png" alt="Diagrama de Pivoting: ShinyHunters vs Canvas LMS">
+                            </div>
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchBrowserTab(evt, tabId) {
+            let i, caseContent, chromeTabs;
+            
+            caseContent = document.getElementsByClassName("case-content");
+            for (i = 0; i < caseContent.length; i++) {
+                caseContent[i].style.display = "none";
+                caseContent[i].classList.remove("active");
+            }
+
+            chromeTabs = document.getElementsByClassName("chrome-tab");
+            for (i = 0; i < chromeTabs.length; i++) {
+                chromeTabs[i].classList.remove("active");
+            }
+
+            document.getElementById(tabId).style.display = "block";
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
